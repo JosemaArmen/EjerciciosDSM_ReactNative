@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, ScrollView, View } from 'react-native';
+import { Text, ScrollView, View, StyleSheet } from 'react-native';
 import { Card } from '@rneui/themed';
 import { EXCURSIONES } from '../comun/excursiones';
 import { CABECERAS } from '../comun/cabeceras';
@@ -12,9 +12,11 @@ function RenderItem(props) {
         if (item != null) {
             return(
                 <Card>
-                    <Card.Title>{item.nombre}</Card.Title>
                     <Card.Divider/>
-                    <Card.Image source={require('./imagenes/40Años.png')}></Card.Image>
+                    <View style={styles.imageContainer}>
+                        <Card.Image source={require('./imagenes/40Años.png')} style={styles.cardImage} />
+                        <Text style={styles.overlayTitle}>{item.nombre}</Text>
+                    </View>
                     <Text style={{margin: 20}}>
                         {item.descripcion}
                     </Text>
@@ -25,6 +27,28 @@ function RenderItem(props) {
             return(<View></View>);
         }
 }
+
+const styles = StyleSheet.create({
+    imageContainer: {
+        position: 'relative',
+    },
+    cardImage: {
+        width: '100%',
+        height: 200, // Ajusta la altura según sea necesario
+    },
+    overlayTitle: {
+        position: 'absolute',
+        top: 10, // Ajusta la posición vertical
+        left: 0, // Ajusta la posición horizontal
+        right: 0, // Ajusta la posición horizontal
+        textAlign: 'center',
+        color: 'chocolate',
+        fontSize: 30,
+        fontWeight: 'bold',
+        //backgroundColor: 'rgba(255, 255, 255, 0.7)', // Fondo semitransparente opcional
+        padding: 5, // Espaciado interno opcional
+    }
+});
 
 class Home extends Component {
 
