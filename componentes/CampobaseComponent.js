@@ -11,6 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Home from './HomeComponent';
 import Contacto from './ContactoComponent';
 import QuienesSomos from './QuienesSomosComponent';
+import { colorGaztaroaClaro, colorGaztaroaOscuro } from '../comun/comun';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -98,7 +99,7 @@ function DrawerNavegador() {
       screenOptions={{
         headerShown: false,
         drawerStyle: {
-          backgroundColor: '#c2d3da',
+          backgroundColor: colorGaztaroaClaro,
         },
       }}
     >
@@ -121,7 +122,7 @@ function DrawerNavegador() {
             />
           ),
           headerTintColor: '#fff',
-          headerStyle: { backgroundColor: '#015afc' },
+          headerStyle: { backgroundColor: colorGaztaroaOscuro },
           headerTitleStyle: { color: '#fff' },
           headerShown: true,
           headerTitleAlign: 'center',
@@ -146,7 +147,7 @@ function DrawerNavegador() {
             />
           ),
           headerTintColor: '#fff',
-          headerStyle: { backgroundColor: '#015afc' },
+          headerStyle: { backgroundColor: colorGaztaroaOscuro },
           headerTitleStyle: { color: '#fff' },
           headerShown: true,
           headerTitleAlign: 'center',
@@ -183,7 +184,7 @@ function DrawerNavegador() {
             />
           ),
           headerTintColor: '#fff',
-          headerStyle: { backgroundColor: '#015afc' },
+          headerStyle: { backgroundColor: colorGaztaroaOscuro },
           headerTitleStyle: { color: '#fff' },
           headerShown: true,
           headerTitleAlign: 'center',
@@ -200,7 +201,7 @@ function CalendarioNavegador() {
       headerMode="float"
       screenOptions={{
         headerTintColor: '#fff',
-        headerStyle: { backgroundColor: '#015afc' },
+        headerStyle: { backgroundColor: colorGaztaroaOscuro },
         headerTitleStyle: { color: '#fff' },
         headerTitleAlign: 'center',
       }}
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   drawerHeader: {
-    backgroundColor: '#015afc',
+    backgroundColor: colorGaztaroaOscuro,
     height: 100,
     alignItems: 'center',
     justifyContent: 'center',

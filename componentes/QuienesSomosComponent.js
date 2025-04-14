@@ -4,6 +4,7 @@ import { Card } from '@rneui/themed';
 import { ACTIVIDADES } from '../comun/actividades';
 import { FlatList } from 'react-native';
 import { ListItem, Avatar } from '@rneui/themed';
+import { baseUrl } from '../comun/comun';
 
 function Historia() {
 
@@ -54,7 +55,7 @@ class QuienesSomos extends Component {
                     <Card.Divider />
                     <ListItem
                         key={index}>
-                        <Avatar source={require('./imagenes/40Años.png')} />
+                        <Avatar source={{uri: baseUrl + item.imagen}} />
                         <ListItem.Content>
                             <ListItem.Title>{item.nombre}</ListItem.Title>
                             <ListItem.Subtitle>{item.descripcion}</ListItem.Subtitle>

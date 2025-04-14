@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { Card, Icon, ListItem } from '@rneui/themed';
 import { EXCURSIONES } from '../comun/excursiones';
 import { COMENTARIOS } from '../comun/comentarios';
+import { baseUrl } from '../comun/comun';
 
 function RenderExcursion(props) {
 
@@ -13,7 +14,7 @@ function RenderExcursion(props) {
             <Card>
                 <Card.Divider />
                 <View style={styles.imageContainer}>
-                    <Card.Image source={require('./imagenes/40Años.png')} style={styles.cardImage} />
+                    <Card.Image source={{uri: baseUrl + excursion.imagen}} style={styles.cardImage} />
                     <Text style={styles.overlayTitle}>{excursion.nombre}</Text>
                 </View>
                 <Text style={{ margin: 20 }}>
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
         left: 0, // Ajusta la posición horizontal
         right: 0, // Ajusta la posición horizontal
         textAlign: 'center',
-        color: 'chocolate',
+        color: 'white',
         fontSize: 30,
         fontWeight: 'bold',
         //backgroundColor: 'rgba(255, 255, 255, 0.7)', // Fondo semitransparente opcional
