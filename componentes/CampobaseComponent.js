@@ -202,23 +202,23 @@ function CalendarioNavegador() {
         headerTintColor: '#fff',
         headerStyle: { backgroundColor: '#015afc' },
         headerTitleStyle: { color: '#fff' },
-        headerLeft: () => (
-          <Icon
-            name='menu'
-            size={28}
-            color='white'
-            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-          />
-        ),
         headerTitleAlign: 'center',
       }}
     >
       <Stack.Screen
         name="Calendar"
         component={Calendario}
-        options={{
+        options={({ navigation }) => ({
           title: 'Calendario Gaztaroa',
-        }}
+          headerLeft: () => (
+            <Icon
+              name='menu'
+              size={28}
+              color='white'
+              onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+            />
+          ),
+        })}
       />
       <Stack.Screen
         name="DetalleExcursion"
