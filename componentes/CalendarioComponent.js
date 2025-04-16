@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { ListItem, Avatar } from '@rneui/themed';
 import { SafeAreaView, FlatList } from 'react-native';
-import { EXCURSIONES } from '../comun/excursiones';
 import { baseUrl } from '../comun/comun';
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => {
+    return {
+        excursiones: state.excursiones
+    }
+}
 
 class Calendario extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            excursiones: EXCURSIONES
-        };
-    }
 
     render() {
 
@@ -34,7 +34,7 @@ class Calendario extends Component {
         return (
             <SafeAreaView>
                 <FlatList
-                    data={this.state.excursiones}
+                    data={this.props.excursiones.excursiones}
                     renderItem={renderCalendarioItem}
                     keyExtractor={item => item.id.toString()}
                 />
@@ -43,4 +43,4 @@ class Calendario extends Component {
     }
 }
 
-export default Calendario;
+export default connect(mapStateToProps)(Calendario);
