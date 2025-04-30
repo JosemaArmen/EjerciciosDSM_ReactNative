@@ -152,3 +152,25 @@ export const addFavorito = (excursionId) => ({
     type: ActionTypes.ADD_FAVORITO,
     payload: excursionId
 });
+
+export const postComentario = (excursionId, valoracion, autor, comentario) => (dispatch) => {
+    
+    function obtenerFecha() {
+        const ahora = new Date();
+        const milisegundos = ahora.getMilliseconds(); // Obtiene los milisegundos
+        const microsegundosExtra = Math.floor(performance.now() % 1 * 1000); // Obtiene microsegundos adicionales
+        const microsegundos = (milisegundos * 1000 + microsegundosExtra).toString().padStart(6, '0'); // Convierte a 6 dígitos
+        return ahora.toISOString().replace(/\.\d{3}Z$/, `.${microsegundos}Z`);
+    }
+    
+    dia = obtenerFecha();
+
+    setTimeout(() => {
+        dispatch(addComentario(excursionId, valoracion, autor, comentario, dia));
+    }, 2000);
+};
+
+export const addComentario = (excursionId, valoracion, autor, comentario, dia) => ({
+    type: ActionTypes.ADD_COMENTARIO,
+    payload: {excursionId: excursionId, valoracion: valoracion, autor: autor, comentario: comentario, dia: dia}
+});

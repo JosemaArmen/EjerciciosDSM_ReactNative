@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, ScrollView, FlatList } from 'react-native';
-import { Card, Icon, ListItem } from '@rneui/themed';
-import { baseUrl } from '../comun/comun';
+import { Modal, Text, View, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { Card, Icon, ListItem, Input, Button } from '@rneui/themed';
+import { baseUrl, colorGaztaroaOscuro } from '../comun/comun';
 import { connect } from 'react-redux';
-import { postFavorito } from '../redux/ActionCreators';
+import { postComentario, postFavorito } from '../redux/ActionCreators';
+import { Rating } from 'react-native-ratings';
 
 const mapStateToProps = state => {
     return {
@@ -14,7 +15,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    postFavorito: (excursionId) => dispatch(postFavorito(excursionId))
+    postFavorito: (excursionId) => dispatch(postFavorito(excursionId)),
+    postComentario: (excursionId, valoracion, autor, comentario) => dispatch(postComentario(excursionId, valoracion, autor, comentario))
 })
 
 function RenderExcursion(props) {
@@ -26,20 +28,30 @@ function RenderExcursion(props) {
             <Card>
                 <Card.Divider />
                 <View style={styles.imageContainer}>
-                    <Card.Image source={{uri: baseUrl + excursion.imagen}} style={styles.cardImage} />
+                    <Card.Image source={{ uri: baseUrl + excursion.imagen }} style={styles.cardImage} />
                     <Text style={styles.overlayTitle}>{excursion.nombre}</Text>
                 </View>
                 <Text style={{ margin: 20 }}>
                     {excursion.descripcion}
                 </Text>
-                <Icon
-                    raised
-                    reverse
-                    name={props.favorita ? 'heart' : 'heart-o'}
-                    type='font-awesome'
-                    color='#f50'
-                    onPress={() => props.favorita ? console.log('La excursión ya se encuentra entre las favoritas') : props.onPress()}
-                />
+                <View style={styles.iconContainer}>
+                    <Icon
+                        raised
+                        reverse
+                        name={props.favorita ? 'heart' : 'heart-o'}
+                        type='font-awesome'
+                        color='#f50'
+                        onPress={() => props.favorita ? console.log('La excursión ya se encuentra entre las favoritas') : props.onPress()}
+                    />
+                    <Icon
+                        raised
+                        reverse
+                        name='pencil'
+                        type='font-awesome'
+                        color={colorGaztaroaOscuro}
+                        onPress={() => props.onPress2()}
+                    />
+                </View>
             </Card>
         );
     }
@@ -106,16 +118,68 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         //backgroundColor: 'rgba(255, 255, 255, 0.7)', // Fondo semitransparente opcional
         padding: 5, // Espaciado interno opcional
-    }
+    },
+    iconContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    modal: {
+        flex: 1,
+        alignItems: 'center',
+        margin: 20,
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+    input: {
+        width: '80%',
+        padding: 10,
+        marginBottom: 5,
+        marginLeft: 5,
+    },
+    modalButtons: {
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 20,
+    },
 });
 
 class DetalleExcursion extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            valoracion: 3,
+            autor: '',
+            comentario: '',
+            showModal: false
+        };
+    }
+
+    toggleModal() {
+        this.setState({ showModal: !this.state.showModal });
     }
 
     marcarFavorito(excursionId) {
         this.props.postFavorito(excursionId);
+    }
+
+    gestionarComentario(excursionId) {
+        this.props.postComentario(excursionId, this.state.valoracion, this.state.autor, this.state.comentario);
+    }
+
+    resetForm() {
+        this.setState({
+            valoracion: 3,
+            autor: '',
+            comentario: '',
+            dia: '',
+            showModal: false
+        });
     }
 
     render() {
@@ -126,10 +190,78 @@ class DetalleExcursion extends Component {
                     excursion={this.props.excursiones.excursiones[+excursionId]}
                     favorita={this.props.favoritos.favoritos.some(el => el === excursionId)}
                     onPress={() => this.marcarFavorito(excursionId)}
+                    onPress2={() => this.toggleModal()}
                 />
                 <RenderComentario
                     comentarios={this.props.comentarios.comentarios.filter((comentario) => comentario.excursionId === excursionId)}
                 />
+                <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={this.state.showModal}
+                    onRequestClose={() => this.toggleModal()}
+                >
+                    <View style={styles.modal}>
+                        <Rating
+                            showRating
+                            type="star"
+                            fractions={0}
+                            startingValue={5}
+                            imageSize={40}
+                            onFinishRating={(value) => this.setState({ valoracion: value })}
+                            style={{ paddingVertical: 10 }}
+                        />
+                        <Input
+                            placeholder="Autor"
+                            style={styles.input}
+                            value={this.state.autor}
+                            onChangeText={(text) => this.setState({ autor: text })}
+                            leftIcon={{
+                                type: 'font-awesome',
+                                name: 'user',
+                                color: 'gray',
+                            }}
+                        />
+                        <Input
+                            placeholder="Comentario"
+                            style={styles.input}
+                            value={this.state.comentario}
+                            onChangeText={(text) => this.setState({ comentario: text })}
+                            leftIcon={{
+                                type: 'font-awesome',
+                                name: 'comment',
+                                color: 'gray',
+                            }}
+                        />
+                        <View style={styles.modalButtons}>
+                            <Button
+                                title="ENVIAR"
+                                buttonStyle={{ backgroundColor: 'transparent' }}
+                                titleStyle={{
+                                    fontSize: 20,
+                                    color: colorGaztaroaOscuro,
+                                }}
+                                onPress={() => {
+                                    this.toggleModal();
+                                    this.resetForm();
+                                    this.gestionarComentario(excursionId);
+                                }}
+                            />
+                            <Button
+                                title="CANCELAR"
+                                buttonStyle={{ backgroundColor: 'transparent' }}
+                                titleStyle={{
+                                    fontSize: 20,
+                                    color: colorGaztaroaOscuro,
+                                }}
+                                onPress={() => {
+                                    this.toggleModal();
+                                    this.resetForm();
+                                }}
+                            />
+                        </View>
+                    </View>
+                </Modal>
             </ScrollView>
         );
     }
